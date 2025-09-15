@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "regions": [
+    "fra1",
+    "iad1"
+  ],
+  "functions": {
+    "api/webhooks/whatsapp/crossai.js": {
+      "runtime": "nodejs18.x",
+      "memory": 128
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "crossai-whatsapp-webhook",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Production-ready WhatsApp Cloud API webhook (Vercel serverless + Express dev server)",
+  "main": "dev-server.js",
+  "scripts": {
+    "dev": "node dev-server.js",
+    "start": "node dev-server.js",
+    "test:hmac": "node scripts/hmac-post.js",
+    "test:verify": "node scripts/verify-get.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "raw-body": "^2.5.2",
+    "node-fetch": "^3.3.2"
+  }
+}

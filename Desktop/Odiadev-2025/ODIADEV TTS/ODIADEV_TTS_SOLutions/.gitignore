@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.env
+# Model caches / weights / audio outputs
+models/
+outputs/
+logs/
+.cache/
+# OS
+.DS_Store
+Thumbs.db

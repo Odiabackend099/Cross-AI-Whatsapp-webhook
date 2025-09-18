@@ -1,0 +1,39 @@
+# Runpod Template Configuration for NaijaTTS
+name: "NaijaTTS - Nigerian English/Pidgin TTS"
+description: "High-quality Text-to-Speech API for Nigerian English and Pidgin using XTTS v2"
+dockerfile: "Dockerfile"
+ports: "7860/http"
+env:
+  - name: "PORT"
+    value: "7860"
+  - name: "HOST"
+    value: "0.0.0.0"
+  - name: "CUDA_VISIBLE_DEVICES"
+    value: "0"
+  - name: "PYTHONUNBUFFERED"
+    value: "1"
+
+# Resource requirements
+resources:
+  gpu: "RTX 4090"  # or "A100", "H100" for higher-end pods
+  vram: "24GB"     # Minimum recommended VRAM
+  ram: "32GB"      # System RAM
+  storage: "50GB"  # Disk space for models and cache
+
+# Startup command
+startup: |
+  echo "Starting NaijaTTS API..."
+  python backend/app.py
+
+# Health check
+health_check:
+  endpoint: "/health"
+  timeout: 30
+  interval: 60
+
+# Template metadata
+template_version: "0.1.0"
+author: "Adaqua"
+category: "AI/ML"
+tags: ["tts", "nigerian", "pidgin", "xtts", "voice-synthesis"]
+

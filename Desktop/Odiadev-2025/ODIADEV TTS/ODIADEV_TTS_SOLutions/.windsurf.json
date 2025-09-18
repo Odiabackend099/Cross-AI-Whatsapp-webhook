@@ -1,0 +1,11 @@
+{
+  "projectName": "odia-tts",
+  "entryHints": {
+    "backend": "backend/app.py",
+    "tests": ["scripts/test_synthesize_xtts.py"]
+  },
+  "context": {
+    "voiceDirHint": "data/voices/lexi",
+    "configDir": "config"
+  }
+}

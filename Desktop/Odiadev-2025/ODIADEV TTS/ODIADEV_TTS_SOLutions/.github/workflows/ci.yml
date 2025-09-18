@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11]
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ffmpeg
+    
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Set up environment variables
+      run: |
+        echo "NAIJA_VOICE_DIR=data/voices/lexi" >> $GITHUB_ENV
+        echo "HF_HOME=$HOME/.cache/huggingface" >> $GITHUB_ENV
+        echo "XDG_CACHE_HOME=$HOME/.cache" >> $GITHUB_ENV
+    
+    - name: Create voice directory
+      run: |
+        mkdir -p data/voices/lexi
+        # Create a dummy WAV file for testing
+        python -c "
+        import numpy as np
+        import soundfile as sf
+        sf.write('data/voices/lexi/dummy.wav', np.zeros(16000), 16000)
+        "
+    
+    - name: Run tests
+      run: |
+        python -m pytest tests/ -v --tb=short
+    
+    - name: Test demo generation
+      run: |
+        python scripts/simple_demo.py
+        ls -la outputs/demo_multilang_30s.wav
+    
+    - name: Test auto-play script
+      run: |
+        chmod +x scripts/play_demo.sh
+        timeout 10s ./scripts/play_demo.sh || true
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+    
+    - name: Install linting tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black isort
+    
+    - name: Run linters
+      run: |
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        black --check .
+        isort --check-only .

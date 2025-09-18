@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>NaijaTTS Demo (30s)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+      body { font-family: system-ui, sans-serif; padding: 24px; }
+      .card { max-width: 720px; margin: auto; padding: 24px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+      button { font-size: 16px; padding: 10px 16px; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>NaijaTTS – 30s Multilingual Demo</h1>
+      <p>EN → Pidgin → Hausa → Yoruba. If your browser blocks autoplay with sound, click "Play".</p>
+      <audio id="player" src="../outputs/naijatts_demo_30s.wav" controls autoplay></audio>
+      <div style="margin-top:12px;">
+        <button onclick="document.getElementById('player').play()">Play</button>
+      </div>
+    </div>
+    <script>
+      // Try to resume autoplay if blocked
+      const a = document.getElementById('player');
+      a.addEventListener('error', ()=>console.warn('Audio error'));
+      a.play().catch(()=>{/* user gesture needed */});
+    </script>
+  </body>
+</html>
+
+
